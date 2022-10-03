@@ -9,10 +9,17 @@ class Linear_QNet(nn.Module):
         super().__init__()
         self.linear1 = nn.Linear(input_size, hidden_size)
         self.linear2 = nn.Linear(hidden_size, output_size)
+        self.linear3 = nn.Linear(hidden_size, output_size)
+
+        if os.path.exists('./model/model.pth'):
+            self.load_state_dict(torch.load('./model/model.pth'))
+            print('Model loaded')
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
-        x = self.linear2(x)
+        x = F.relu(self.linear2(x))
+        x = self.linear3(x)
+        
         return x
 
     def save(self, file_name='model.pth'):
